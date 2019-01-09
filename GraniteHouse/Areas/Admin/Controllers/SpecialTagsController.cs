@@ -9,40 +9,41 @@ using Microsoft.AspNetCore.Mvc;
 namespace GraniteHouse.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class ProductTypesController : Controller
+    public class SpecialTagsController : Controller
     {
         private readonly ApplicationDbContext _db;
 
-        public ProductTypesController(ApplicationDbContext db)
+        public SpecialTagsController(ApplicationDbContext db)
         {
             _db = db;
         }
         public IActionResult Index()
         {
-            return View(_db.ProductTypes.ToList());
-        } 
+            return View(_db.SpecialTags.ToList());
+        }
 
-        //GET Create actiom method
+        //Get Create Action Method
         public IActionResult Create()
         {
             return View();
         }
 
-        //POST Create action method
+        //Poat Create Action Method
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductType productType)
+        public async Task<IActionResult> Create(SpecialTag specialTag)
         {
             if (ModelState.IsValid)
             {
-                _db.ProductTypes.Add(productType);
+                _db.SpecialTags.Add(specialTag);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(productType);
+
+            return View();
         }
 
-        //GET Edit actiom method
+        //GET Edit action method
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -50,34 +51,38 @@ namespace GraniteHouse.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var productType = await _db.ProductTypes.FindAsync(id);
-            if (productType == null)
+            var specialTag = await _db.SpecialTags.FindAsync(id);
+            if (specialTag == null)
             {
                 return NotFound();
             }
 
-            return View(productType);
+            return View(specialTag);
         }
 
-        //POST Edit action method
+        //POST edit action method
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit (int id, ProductType productType)
+        public async Task<IActionResult> Edit(int id, SpecialTag specialTag)
         {
-            if (id != productType.Id)
+            if (id != specialTag.Id)
             {
-                return NotFound(); 
+                return NotFound();
             }
+
             if (ModelState.IsValid)
             {
-                _db.Update(productType);
+                _db.Update(specialTag);
                 await _db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            } 
-            return View(productType);
+            }
+
+            return View(specialTag);
         }
 
-        //GET Details actiom method
+
+
+        //GET Details action method
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -85,16 +90,16 @@ namespace GraniteHouse.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var productType = await _db.ProductTypes.FindAsync(id);
-            if (productType == null)
+            var specialTag = await _db.SpecialTags.FindAsync(id);
+            if (specialTag == null)
             {
                 return NotFound();
             }
 
-            return View(productType);
+            return View(specialTag);
         }
 
-        //GET Delete actiom method
+        //GET Delete action method
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -102,27 +107,24 @@ namespace GraniteHouse.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var productType = await _db.ProductTypes.FindAsync(id);
-            if (productType == null)
+            var specialTag = await _db.SpecialTags.FindAsync(id);
+            if (specialTag == null)
             {
                 return NotFound();
             }
 
-            return View(productType);
+            return View(specialTag);
         }
 
-        //POST Delete action method
-        //[HttpPost, ActionName("Delete")]
+        //Post Delete action method
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-           
-            var productType = await _db.ProductTypes.FindAsync(id);
-            _db.ProductTypes.Remove(productType);
+            var specialTag = await _db.SpecialTags.FindAsync(id);
+            _db.SpecialTags.Remove(specialTag);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-            
         }
     }
 }
