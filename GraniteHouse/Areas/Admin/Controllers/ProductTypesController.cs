@@ -77,7 +77,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
             return View(productType);
         }
 
-        //GET Edit actiom method
+        //GET Details actiom method
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -92,6 +92,37 @@ namespace GraniteHouse.Areas.Admin.Controllers
             }
 
             return View(productType);
+        }
+
+        //GET Delete actiom method
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var productType = await _db.ProductTypes.FindAsync(id);
+            if (productType == null)
+            {
+                return NotFound();
+            }
+
+            return View(productType);
+        }
+
+        //POST Delete action method
+        //[HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+           
+            var productType = await _db.ProductTypes.FindAsync(id);
+            _db.ProductTypes.Remove(productType);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+            
         }
     }
 }
