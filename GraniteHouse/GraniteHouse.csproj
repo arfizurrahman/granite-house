@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Areas\Admin\Views\SpecialTags\Delete.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
