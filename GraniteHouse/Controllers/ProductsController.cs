@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GraniteHouse.Controllers
 {
+    [Area("Admin")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _db;
