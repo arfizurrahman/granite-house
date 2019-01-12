@@ -100,8 +100,24 @@ namespace GraniteHouse.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
 
+        }
 
+        //GET : Edit
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            ProductVM.Product = await _db.Products.Include(m => m.ProductType).Include(m => m.SpecialTag)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (ProductVM.Product == null)
+            {
+                return NotFound();
+            }
+
+            return View(ProductVM);
         }
     }
 }
