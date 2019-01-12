@@ -1,0 +1,73 @@
+﻿@using GraniteHouse.Extensions
+@model GraniteHouse.Models.ViewModels.ProductViewModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<br />
+<h2 class="text-info">Product Details</h2>
+
+    <div class="p-4 border rounded row">
+        
+        <div class="col-8">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Product.Name"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Product.Name" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Product.Price"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Product.Price" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="ProductTypes"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Product.ProductType.Name" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="SpecialTags"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Product.SpecialTag.Name" readonly class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Product.ShadeColor"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="Product.ShadeColor" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="Product.Available"></label>
+                </div>
+                <div class="col-8">
+                    <input type="checkbox" asp-for="Product.Available" readonly class="form-control" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-1"></div>
+        <div class="col-3">
+            <img src="@Model.Product.Image" width="100%" style="border-radius: 5px; border: 1px solid #bbb9b9;" />
+        </div>
+        <br />
+        <div class="form-group">
+            
+            <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Product.Id">Edit</a>
+            <a asp-action="Index" class="btn btn-success">Back to List</a>
+        </div>
+    </div>
