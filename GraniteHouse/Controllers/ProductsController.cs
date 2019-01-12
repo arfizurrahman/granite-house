@@ -92,8 +92,8 @@ namespace GraniteHouse.Controllers
                 //iF user doesn't select a file, add the default image path
                 var uploads = Path.Combine(webRootPath,
                     StaticDetails.ImageFolder + @"\" + StaticDetails.DefaultProductImage);
-                System.IO.File.Copy(uploads, webRootPath + @"\" + StaticDetails.ImageFolder + @"\" + ProductVM.Product.Id + ".png");
-                productFromDb.Image = @"\" + StaticDetails.ImageFolder + @"\" + ProductVM.Product.Id + ".png";
+                System.IO.File.Copy(uploads, webRootPath + @"\" + StaticDetails.ImageFolder + @"\" + ProductVM.Product.Id + ".jpeg");
+                productFromDb.Image = @"\" + StaticDetails.ImageFolder + @"\" + ProductVM.Product.Id + ".jpeg";
 
             }
 

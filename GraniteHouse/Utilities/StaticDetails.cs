@@ -7,7 +7,7 @@ namespace GraniteHouse.Utilities
 {
     public class StaticDetails
     {
-        public const string DefaultProductImage = "default_product.jpg";
+        public const string DefaultProductImage = "default_image.jpeg";
         public const string ImageFolder = @"images\product-image";
     }
 }
