@@ -31,10 +31,15 @@
         {
             <tr>
                 <td>@Html.DisplayFor( m=> item.Name)</td>
-                <td>@Html.DisplayFor( m=> item.Price)</td>
+                <td>@String.Format( "{0:c}",item.Price)</td>
                 <td>@Html.DisplayFor( m=> item.Available)</td>
                 <td>@Html.DisplayFor( m=> item.ProductType.Name)</td>
-                <td>@Html.DisplayFor( m=> item.SpecialTag.Name)</td>
+                <td>
+                    @if (!item.SpecialTag.Name.Equals("--None--"))
+                    {
+                        @Html.DisplayFor(m => item.SpecialTag.Name)
+                    }
+                </td>
                 <td>
                     <partial name="_TableButtonPartial" model="item.Id"/>
                 </td>

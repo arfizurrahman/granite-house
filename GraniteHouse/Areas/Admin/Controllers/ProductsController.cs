@@ -139,7 +139,7 @@ namespace GraniteHouse.Controllers
                 // get the product from db for updating
                 var productFromDb = _db.Products.Where(m => m.Id == ProductVM.Product.Id).FirstOrDefault();
 
-                if (files[0].Length > 0 && files[0] != null)
+                if (files.Count > 0 && files[0] != null)
                 {
                     //if user uploads a new image
                     var uploads = Path.Combine(webRootPath, StaticDetails.ImageFolder);
@@ -200,6 +200,52 @@ namespace GraniteHouse.Controllers
             }
 
             return View(ProductVM);
+        }
+        //GET : Delete
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ProductVM.Product = await _db.Products.Include(m => m.ProductType).Include(m => m.SpecialTag)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (ProductVM.Product == null)
+            {
+                return NotFound();
+            }
+
+            return View(ProductVM);
+        }
+
+        //POST : Delete
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var webRootPath = _hostingEnvironment.WebRootPath;
+
+            Product product = await _db.Products.FindAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var uploads = Path.Combine(webRootPath, StaticDetails.ImageFolder);
+
+            var extension = Path.GetExtension(product.Image);
+
+            if (System.IO.File.Exists(Path.Combine(uploads, product.Id + extension)))
+            {
+                System.IO.File.Delete(Path.Combine(uploads, product.Id + extension));
+            }
+
+            _db.Products.Remove(product);
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
