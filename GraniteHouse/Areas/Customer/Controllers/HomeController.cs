@@ -3,17 +3,27 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using GraniteHouse.Data;
 using Microsoft.AspNetCore.Mvc;
 using GraniteHouse.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GraniteHouse.Controllers
 {
     [Area("Customer")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _db;
+
+        public HomeController(ApplicationDbContext db)
         {
-            return View();
+            _db = db;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var productList = await _db.Products.Include(m => m.ProductType)
+                .Include(m => m.SpecialTag).ToListAsync();
+            return View(productList);
         }
 
         public IActionResult About()
