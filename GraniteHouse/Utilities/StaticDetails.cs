@@ -9,5 +9,6 @@ namespace GraniteHouse.Utilities
     {
         public const string DefaultProductImage = "default_image.jpeg";
         public const string ImageFolder = @"images\product-image";
+        public const string ShoppingCartName = "GHShoppingCart";
     }
 }

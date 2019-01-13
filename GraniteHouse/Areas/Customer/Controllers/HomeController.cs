@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using GraniteHouse.Data;
+using GraniteHouse.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using GraniteHouse.Models;
+using GraniteHouse.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraniteHouse.Controllers
@@ -39,7 +41,40 @@ namespace GraniteHouse.Controllers
             return View(product);
         }
 
-        
+        [HttpPost, ActionName("Details")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToBag(int id)
+        {
+            List<int> shoppingCartList = HttpContext.Session.Get<List<int>>(StaticDetails.ShoppingCartName);
+
+            if (shoppingCartList == null)
+            {
+                shoppingCartList = new List<int>();
+            }
+
+            shoppingCartList.Add(id);
+            HttpContext.Session.Set(StaticDetails.ShoppingCartName, shoppingCartList);
+
+            return RedirectToAction("Index", "Home", new {area = "Customer"});
+        }
+
+        public IActionResult Remove(int id)
+        {
+            List<int> shoppingCartList = HttpContext.Session.Get<List<int>>(StaticDetails.ShoppingCartName);
+
+            if (shoppingCartList.Count > 0)
+            {
+                if (shoppingCartList.Contains(id))
+                {
+                    shoppingCartList.Remove(id);
+                }
+            }
+
+            HttpContext.Session.Set(StaticDetails.ShoppingCartName, shoppingCartList);
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

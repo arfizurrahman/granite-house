@@ -1,5 +1,10 @@
 ﻿@using GraniteHouse.Extensions
+@using GraniteHouse.Utilities
+@using Microsoft.AspNetCore.Http
 @model GraniteHouse.Models.Product
+
+@inject IHttpContextAccessor HttpContextAccessor
+
 @{
     ViewData["Title"] = "Details";
 }
@@ -44,7 +49,7 @@
                     <input asp-for="ProductType.Name" readonly class="form-control" />
                 </div>
             </div>
-            
+
             @if (!Model.SpecialTag.Name.Equals("--None--"))
             {
                 <div class="form-group row">
@@ -61,11 +66,29 @@
                 <div class="col-4">
                 </div>
                 <div class="col-8">
-                    <button type="submit" class="btn btn-primary form-control" asp-route-id="@Model.Id">Add to Bag</button>
+                    @{
+                        bool isInBag = false;
+                        List<int> lstCart = HttpContextAccessor.HttpContext.Session.Get<List<int>>(StaticDetails.ShoppingCartName);
+                        if (lstCart != null && lstCart.Contains(Model.Id))
+                        {
+                            isInBag = true;
+
+                        }
+                    }
+
+                    @if (isInBag)
+                    {
+                        <button type="submit" value="Remove From Bag" asp-action="Remove" asp-route-id="@Model.Id" class="btn btn-danger form-control">Remove From Bag</button>
+
+                    }
+                    else
+                    {
+                        <button type="submit" value="Add to Bag" asp-route-id="@Model.Id" class="btn btn-primary form-control">Add To Bag</button>
+                    }
                 </div>
             </div>
 
-            
+
         </div>
 
         <div class="col-1"></div>
@@ -81,7 +104,7 @@
         </div>
         <br />
         <div class="form-group">
-            <input hidden asp-for="Id"/>
+            <input hidden asp-for="Id" />
             <a asp-action="Index" class="btn btn-success">Back to List</a>
         </div>
     </div>
