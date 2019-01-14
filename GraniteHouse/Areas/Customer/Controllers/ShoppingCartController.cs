@@ -84,7 +84,7 @@ namespace GraniteHouse.Areas.Customer.Controllers
             cartItemList = new List<int>();
             HttpContext.Session.Set(StaticDetails.ShoppingCartName, cartItemList);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("AppointmentConfirmation","ShoppingCart", new {Id = appointmentId});
 
         }
 
@@ -105,5 +105,25 @@ namespace GraniteHouse.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        public IActionResult AppointmentConfirmation(int id)
+        {
+            ShoppingCartVM.Appointment = _db.Appointments.Where(a => a.Id == id).FirstOrDefault();
+
+            List<ProductsSelectedForAppointment> productsSelected =
+                _db.ProductsSelectedForAppointments.Where(p => p.AppointmentId == id).ToList();
+
+            foreach (ProductsSelectedForAppointment item in productsSelected)
+            {
+                Product product = _db.Products
+                    .Include(p=>p.ProductType)
+                    .Include(p=>p.SpecialTag)
+                    .Where(p=>p.Id == item.Id)
+                    .FirstOrDefault();
+                ShoppingCartVM.Products.Add(product);
+            }
+
+            return View(ShoppingCartVM);
+        }
     }
 }
