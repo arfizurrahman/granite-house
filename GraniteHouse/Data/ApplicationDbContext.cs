@@ -20,5 +20,7 @@ namespace GraniteHouse.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<ProductsSelectedForAppointment> ProductsSelectedForAppointments { get; set; }
+
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 } 
