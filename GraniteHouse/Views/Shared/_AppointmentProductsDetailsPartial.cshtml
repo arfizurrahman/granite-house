@@ -26,9 +26,7 @@
         {
             <tr style="padding: 50px">
                 <td>
-                    <a asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
-                        <img src="@item.Image" width="100%" style="margin: auto; display: block; border-radius: 5px; border: 1px solid #bbb9b9" />
-                    </a>
+                    <img src="@item.Image" width="100%" style="margin: auto; display: block; border-radius: 5px; border: 1px solid #bbb9b9" />
                 </td>
                 <td style="text-align: center">
                     @Html.DisplayFor(p => item.Name)

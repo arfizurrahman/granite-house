@@ -118,7 +118,7 @@ namespace GraniteHouse.Areas.Customer.Controllers
                 Product product = _db.Products
                     .Include(p=>p.ProductType)
                     .Include(p=>p.SpecialTag)
-                    .Where(p=>p.Id == item.Id)
+                    .Where(p=>p.Id == item.ProductId)
                     .FirstOrDefault();
                 ShoppingCartVM.Products.Add(product);
             }
