@@ -23,7 +23,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
         {
             _db = db;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchName = null, string searchEmail = null, string searchPhone = null, string searchDate = null)
         {
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             var claimsIdentity = (ClaimsIdentity) this.User.Identity;
@@ -40,6 +40,34 @@ namespace GraniteHouse.Areas.Admin.Controllers
                 appointmentVM.Appointments = appointmentVM.Appointments.Where(a => a.SalesPersonId == claim.Value).ToList();
             }
 
+            if (searchName != null)
+            {
+                appointmentVM.Appointments = appointmentVM.Appointments
+                    .Where(a => a.CustomerName.ToLower().Contains(searchName.ToLower())).ToList();
+            }
+            if (searchEmail != null)
+            {
+                appointmentVM.Appointments = appointmentVM.Appointments
+                    .Where(a => a.CustomerEmail.ToLower().Contains(searchEmail.ToLower())).ToList();
+            }
+            if (searchPhone != null)
+            {
+                appointmentVM.Appointments = appointmentVM.Appointments
+                    .Where(a => a.CustomerPhoneNumber.ToLower().Contains(searchPhone.ToLower())).ToList();
+            }
+            if (searchDate != null)
+            {
+                try
+                {
+                    DateTime appDate = Convert.ToDateTime(searchDate);
+;                    appointmentVM.Appointments = appointmentVM.Appointments
+                        .Where(a => a.AppointmentDate.ToShortDateString().Equals(appDate.ToShortDateString())).ToList();
+                }
+                catch (Exception e)
+                {
+                    
+                }
+            }
             return View(appointmentVM);
         }
     }
