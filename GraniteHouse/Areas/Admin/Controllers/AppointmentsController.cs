@@ -87,5 +87,39 @@ namespace GraniteHouse.Areas.Admin.Controllers
 
             return View(appointmentDetailsViewModel);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, AppointmentDetailsViewModel appointmentDetails)
+        {
+            if (ModelState.IsValid)
+            {
+                appointmentDetails.Appointment.AppointmentDate = appointmentDetails.Appointment.AppointmentDate
+                    .AddHours(appointmentDetails.Appointment.AppointmentTime.Hour)
+                    .AddMinutes(appointmentDetails.Appointment.AppointmentTime.Minute);
+
+                var appointmentFromDb =
+                    _db.Appointments.FirstOrDefault(a => a.Id == appointmentDetails.Appointment.Id);
+
+                appointmentFromDb.CustomerName = appointmentDetails.Appointment.CustomerName;
+                appointmentFromDb.CustomerEmail = appointmentDetails.Appointment.CustomerEmail;
+                appointmentFromDb.CustomerPhoneNumber = appointmentDetails.Appointment.CustomerPhoneNumber;
+                appointmentFromDb.AppointmentDate = appointmentDetails.Appointment.AppointmentDate;
+                appointmentFromDb.IsConfirmed = appointmentDetails.Appointment.IsConfirmed;
+
+                if (User.IsInRole(StaticDetails.SuperAdminEndUser))
+                {
+                    appointmentFromDb.SalesPersonId = appointmentDetails.Appointment.SalesPersonId;
+                }
+
+                await _db.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(appointmentDetails);
+        }
+
+
     }
 }
