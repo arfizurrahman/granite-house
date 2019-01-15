@@ -15,7 +15,7 @@ namespace GraniteHouse.Models
         public string SalesPersonId { get; set; }
 
         [ForeignKey("SalesPersonId")]
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser SalesPerson { get; set; }
         public DateTime AppointmentDate { get; set; }
 
         [NotMapped]

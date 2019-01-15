@@ -1,0 +1,46 @@
+﻿@model GraniteHouse.Models.ViewModels.AppointmentViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form method="post">
+    <br/>
+    <br/>
+    <h2 class="text-info">Appoinment List</h2>
+    <br/>
+    <div style="height: 150px; background-color: aliceblue">
+        @*For search options*@
+    </div>
+    <br/>
+    <br/>
+    <div>
+        <table class="table table-striped border">
+            <tr class="table-info">
+                <th>@Html.DisplayNameFor(m=>m.Appointments.FirstOrDefault().SalesPerson.Name)</th>
+                <th>@Html.DisplayNameFor(m=>m.Appointments.FirstOrDefault().AppointmentDate)</th>
+                <th>@Html.DisplayNameFor(m=>m.Appointments.FirstOrDefault().CustomerName)</th>
+                <th>@Html.DisplayNameFor(m=>m.Appointments.FirstOrDefault().CustomerPhoneNumber)</th>
+                <th>@Html.DisplayNameFor(m=>m.Appointments.FirstOrDefault().CustomerEmail)</th>
+                <th>@Html.DisplayNameFor(m=>m.Appointments.FirstOrDefault().IsConfirmed)</th>
+                <th></th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.Appointments)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m=> item.SalesPerson.Name)</td>
+                    <td>@Html.DisplayFor(m=> item.AppointmentDate)</td>
+                    <td>@Html.DisplayFor(m=> item.CustomerName)</td>
+                    <td>@Html.DisplayFor(m=> item.CustomerPhoneNumber)</td>
+                    <td>@Html.DisplayFor(m=> item.CustomerEmail)</td>
+                    <td>@Html.DisplayFor(m=> item.IsConfirmed)</td>
+                    <td>
+                        <partial name="_TableButtonPartial" model="@item.Id"/>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</form>
+
