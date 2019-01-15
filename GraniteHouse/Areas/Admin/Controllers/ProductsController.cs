@@ -8,6 +8,7 @@ using GraniteHouse.Data;
 using GraniteHouse.Models;
 using GraniteHouse.Models.ViewModels;
 using GraniteHouse.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 namespace GraniteHouse.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = StaticDetails.SuperAdminEndUser)]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _db;

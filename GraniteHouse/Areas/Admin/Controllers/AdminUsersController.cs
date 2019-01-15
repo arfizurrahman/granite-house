@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using GraniteHouse.Data;
 using GraniteHouse.Models;
+using GraniteHouse.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GraniteHouse.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = StaticDetails.SuperAdminEndUser)]
     public class AdminUsersController : Controller
     {
         private readonly ApplicationDbContext _db;
