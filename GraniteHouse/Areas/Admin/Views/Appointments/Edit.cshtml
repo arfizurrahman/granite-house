@@ -1,6 +1,7 @@
 ﻿@using GraniteHouse.Extensions
 @model GraniteHouse.Models.ViewModels.AppointmentDetailsViewModel
 @using GraniteHouse.Utilities
+
 @{
     ViewData["Title"] = "Edit";
 }
@@ -36,7 +37,7 @@
                     <label asp-for="Appointment.AppointmentDate"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="Appointment.AppointmentDate" class="form-control" />
+                    <input asp-for="Appointment.AppointmentDate" id="datepicker" type="text" class="form-control" />
                 </div>
                 <span asp-validation-for="Appointment.AppointmentDate" class="text-danger"></span>
             </div>
@@ -45,7 +46,7 @@
                     <label asp-for="Appointment.AppointmentTime"></label>
                 </div>
                 <div class="col-8">
-                    <input asp-for="Appointment.AppointmentTime" class="form-control" />
+                    <input asp-for="Appointment.AppointmentTime" type="text" id="timepicker" class="form-control timepicker" />
                 </div>
                 <span asp-validation-for="Appointment.AppointmentTime" class="text-danger"></span>
             </div>
@@ -63,6 +64,15 @@
                     <label asp-for="Appointment.SalesPerson"></label>
                 </div>
                 <div class="col-8">
+                    @if (User.IsInRole(StaticDetails.AdminEndUser))
+                    {
+                        <input asp-for="@Model.Appointment.SalesPerson.Name" readonly class="form-control" />
+                        <input asp-for="@Model.Appointment.SalesPersonId" hidden />
+                    }
+                    else
+                    {
+                        <select asp-for="Appointment.SalesPersonId" asp-items="@Model.SalesPersons.ToSelectListItemString(Model.Appointment.SalesPersonId)" class="form-control"></select>
+                    }
                 </div>
             </div>
             <div class="form-group row">
@@ -75,8 +85,10 @@
             </div>
         </div>
 
-        <div class="col-6"></div>
-
+        <div class="col-6">
+            <partial name="~/Views/Shared/_AppointmentProductsDetailsPartial.cshtml" model="Model.Products"/>
+        </div>
+            
         <br />
         <div class="form-group">
             <input type="submit" class="btn btn-primary" value="Update" />
@@ -88,27 +100,45 @@
 
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
 
-@section Scripts{
     <script>
-        $('.timepicker').timepicker({
-            timeFormat: 'h:mm p',
-            interval: 30,
-            minTime: '10',
-            maxTime: '3:00pm',
-            defaultTime: '11',
-            startTime: '10:00',
-            dynamic: true,
-            dropdown: true,
-            scrollbar: true
-        });
+        
         $(function() {
             $("#datepicker").datepicker({
                 minDate: +1,
                 maxDate: "+3M"
             });
 
+            $('.timepicker').timepicker({
+                timeFormat: 'h:mm p',
+                interval: 30,
+                minTime: '10',
+                maxTime: '3:00pm',
+                defaultTime: '11',
+                startTime: '10:00',
+                dynamic: true,
+                dropdown: true,
+                scrollbar: true
+            });
+        });
+
+        $(function() {
+            var appointmentDateTime = document.getElementById("datepicker").value;
+            var splitedData = "";
+            if (appointmentDateTime.indexOf(" ") > 0) {
+                splitedData = appointmentDateTime.split(" ");
+            } else {
+                splitedData = appointmentDateTime.split("T");
+            }
+
+            var time = splitedData[1].substring(0, 5);
+            if (time.slice(-1) ==":") {
+                time = time.substring(0, time.length - 1);
+            }
+
+            var amPm = splitedData[2];
+            $('#datepicker').attr("value", splitedData[0]);
+            $('#timepicker').attr('value', time + ' ' + amPm);
 
         });
     </script>
