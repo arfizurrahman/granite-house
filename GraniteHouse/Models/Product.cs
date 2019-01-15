@@ -15,6 +15,8 @@ namespace GraniteHouse.Models
         public double Price { get; set; }
         public bool Available { get; set; }
         public string Image { get; set; }
+
+        [Display(Name = "Shade Color")]
         public string ShadeColor { get; set; }
 
         [Display(Name="Product Type")]

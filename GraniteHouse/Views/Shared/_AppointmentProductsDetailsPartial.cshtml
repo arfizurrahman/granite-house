@@ -5,19 +5,19 @@
 {
     <table class="table table-striped" width="100%">
         <tr class="table-info">
-            <td style="text-align: center; width: 20%"></td>
-            <td style="text-align: center;">
+            <th style="text-align: center; width: 20%"></th>
+            <th style="text-align: center;">
                 <label asp-for="@Model.FirstOrDefault().Name"></label>
-            </td>
-            <td style="text-align: center;">
+            </th>
+            <th style="text-align: center;">
                 <label asp-for="@Model.FirstOrDefault().Price"></label>
-            </td>
-            <td style="text-align: center;">
+            </th>
+            <th style="text-align: center;">
                 <label asp-for="@Model.FirstOrDefault().ShadeColor"></label>
-            </td>
-            <td style="text-align: center;">
+            </th>
+            <th style="text-align: center;">
                 <label asp-for="@Model.FirstOrDefault().ProductType.Name"></label>
-            </td>
+            </th>
             
         </tr>
         @foreach (var item in Model)

@@ -16,14 +16,24 @@ namespace GraniteHouse.Models
 
         [ForeignKey("SalesPersonId")]
         public virtual ApplicationUser SalesPerson { get; set; }
+
+        [Display(Name = "Appointment Date")]
         public DateTime AppointmentDate { get; set; }
 
         [NotMapped]
+        [Display(Name = "Appointment Time")]
         public DateTime AppointmentTime { get; set; }
 
+        [Display(Name = "Customer Name")]
         public string CustomerName { get; set; }
+
+        [Display(Name = "Customer Phone Number")]
         public string CustomerPhoneNumber { get; set; }
+
+        [Display(Name = "Customer Email")]
         public string CustomerEmail { get; set; }
+
+        [Display(Name = "Confirmed")]
         public bool IsConfirmed { get; set; }
     }
 }

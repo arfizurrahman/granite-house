@@ -74,6 +74,10 @@ namespace GraniteHouse.Areas.Admin.Controllers
         //GET : Edit
         public async Task<IActionResult> Edit(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var productList = (IEnumerable<Product>)(from p in _db.Products
                                                   join a in _db.ProductsSelectedForAppointments on p.Id equals a.ProductId
                                                   where a.AppointmentId == id
@@ -88,6 +92,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
             return View(appointmentDetailsViewModel);
         }
 
+        //POST : Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, AppointmentDetailsViewModel appointmentDetails)
@@ -120,6 +125,58 @@ namespace GraniteHouse.Areas.Admin.Controllers
             return View(appointmentDetails);
         }
 
+        //GET : Edit
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var productList = (IEnumerable<Product>)(from p in _db.Products
+                join a in _db.ProductsSelectedForAppointments on p.Id equals a.ProductId
+                where a.AppointmentId == id
+                select p).Include("ProductType");
+            AppointmentDetailsViewModel appointmentDetailsViewModel = new AppointmentDetailsViewModel()
+            {
+                Appointment = await _db.Appointments.Where(a => a.Id == id).Include(a => a.SalesPerson).FirstOrDefaultAsync(),
+                SalesPersons = await _db.ApplicationUsers.ToListAsync(),
+                Products = productList.ToList()
+            };
+
+            return View(appointmentDetailsViewModel);
+        }
+
+        //GET : Delete
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var productList = (IEnumerable<Product>)(from p in _db.Products
+                join a in _db.ProductsSelectedForAppointments on p.Id equals a.ProductId
+                where a.AppointmentId == id
+                select p).Include("ProductType");
+            AppointmentDetailsViewModel appointmentDetailsViewModel = new AppointmentDetailsViewModel()
+            {
+                Appointment = await _db.Appointments.Where(a => a.Id == id).Include(a => a.SalesPerson).FirstOrDefaultAsync(),
+                SalesPersons = await _db.ApplicationUsers.ToListAsync(),
+                Products = productList.ToList()
+            };
+
+            return View(appointmentDetailsViewModel);
+        }
+
+        //POST : Delete
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var appointment = await _db.Appointments.FindAsync(id);
+            _db.Appointments.Remove(appointment);
+            await _db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
     }
 }

@@ -1,0 +1,119 @@
+﻿@using GraniteHouse.Extensions
+@model GraniteHouse.Models.ViewModels.AppointmentDetailsViewModel
+@using GraniteHouse.Utilities
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<br />
+<h2 class="text-info">Appointment Details</h2>
+
+<div class="p-4 border rounded row">
+    <div class="col-6">
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Appointment.CustomerName"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Appointment.CustomerName" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Appointment.CustomerEmail"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Appointment.CustomerEmail" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Appointment.AppointmentDate"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Appointment.AppointmentDate" type="text" id="datepicker" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Appointment.AppointmentTime"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Appointment.AppointmentTime" type="text" id="timepicker" disabled class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Appointment.CustomerPhoneNumber"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Appointment.CustomerPhoneNumber" disabled class="form-control" />
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Appointment.SalesPerson"></label>
+            </div>
+            <div class="col-8">
+                @if (User.IsInRole(StaticDetails.AdminEndUser))
+                {
+                    <input asp-for="@Model.Appointment.SalesPerson.Name" disabled="" class="form-control" />
+                    <input asp-for="@Model.Appointment.SalesPersonId" hidden />
+                }
+                else
+                {
+                    <select asp-for="Appointment.SalesPersonId" asp-items="@Model.SalesPersons.ToSelectListItemString(Model.Appointment.SalesPersonId)" disabled class="form-control"></select>
+                }
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-4">
+                <label asp-for="Appointment.IsConfirmed"></label>
+            </div>
+            <div class="col-8">
+                <input asp-for="Appointment.IsConfirmed" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <partial name="~/Views/Shared/_AppointmentProductsDetailsPartial.cshtml" model="Model.Products" />
+    </div>
+
+    <br />
+    <div class="form-group">
+        <a asp-action="Index" class="btn btn-success">Back to List</a>
+    </div>
+</div>
+
+
+@section Scripts{
+   
+
+    <script>
+
+        
+
+        $(function () {
+            var appointmentDateTime = document.getElementById("datepicker").value;
+            var splitedData = "";
+            if (appointmentDateTime.indexOf(" ") > 0) {
+                splitedData = appointmentDateTime.split(" ");
+            } else {
+                splitedData = appointmentDateTime.split("T");
+            }
+
+            var time = splitedData[1].substring(0, 5);
+            if (time.slice(-1) == ":") {
+                time = time.substring(0, time.length - 1);
+            }
+
+            var amPm = splitedData[2];
+            $('#datepicker').attr("value", splitedData[0]);
+            $('#timepicker').attr('value', time + ' ' + amPm);
+
+        });
+    </script>
+}
