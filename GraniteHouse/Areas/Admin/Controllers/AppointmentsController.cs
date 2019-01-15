@@ -77,11 +77,11 @@ namespace GraniteHouse.Areas.Admin.Controllers
             var productList = (IEnumerable<Product>)(from p in _db.Products
                                                   join a in _db.ProductsSelectedForAppointments on p.Id equals a.ProductId
                                                   where a.AppointmentId == id
-                                                  select p).Include("ProductTypes");
+                                                  select p).Include("ProductType");
             AppointmentDetailsViewModel appointmentDetailsViewModel = new AppointmentDetailsViewModel()
             {
-                Appointment = _db.Appointments.Where(a => a.Id == id).Include(a => a.SalesPerson).FirstOrDefault(),
-                SalesPersons = _db.ApplicationUsers.ToList(),
+                Appointment = await _db.Appointments.Where(a => a.Id == id).Include(a => a.SalesPerson).FirstOrDefaultAsync(),
+                SalesPersons = await _db.ApplicationUsers.ToListAsync(),
                 Products = productList.ToList()
             };
 
