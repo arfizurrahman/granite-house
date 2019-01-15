@@ -26,7 +26,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
         public async Task<IActionResult> Index(string searchName = null, string searchEmail = null, string searchPhone = null, string searchDate = null)
         {
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var claimsIdentity = (ClaimsIdentity) this.User.Identity;
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             AppointmentViewModel appointmentVM = new AppointmentViewModel()
@@ -34,7 +34,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
                 Appointments = new List<Appointment>()
             };
 
-            appointmentVM.Appointments = _db.Appointments.Include(u=>u.SalesPerson).ToList();
+            appointmentVM.Appointments = _db.Appointments.Include(u => u.SalesPerson).ToList();
             if (User.IsInRole(StaticDetails.AdminEndUser))
             {
                 appointmentVM.Appointments = appointmentVM.Appointments.Where(a => a.SalesPersonId == claim.Value).ToList();
@@ -60,15 +60,32 @@ namespace GraniteHouse.Areas.Admin.Controllers
                 try
                 {
                     DateTime appDate = Convert.ToDateTime(searchDate);
-;                    appointmentVM.Appointments = appointmentVM.Appointments
-                        .Where(a => a.AppointmentDate.ToShortDateString().Equals(appDate.ToShortDateString())).ToList();
+                    ; appointmentVM.Appointments = appointmentVM.Appointments
+                         .Where(a => a.AppointmentDate.ToShortDateString().Equals(appDate.ToShortDateString())).ToList();
                 }
                 catch (Exception e)
                 {
-                    
+
                 }
             }
             return View(appointmentVM);
+        }
+
+        //GET : Edit
+        public async Task<IActionResult> Edit(int? id)
+        {
+            var productList = (IEnumerable<Product>)(from p in _db.Products
+                                                  join a in _db.ProductsSelectedForAppointments on p.Id equals a.ProductId
+                                                  where a.AppointmentId == id
+                                                  select p).Include("ProductTypes");
+            AppointmentDetailsViewModel appointmentDetailsViewModel = new AppointmentDetailsViewModel()
+            {
+                Appointment = _db.Appointments.Where(a => a.Id == id).Include(a => a.SalesPerson).FirstOrDefault(),
+                SalesPersons = _db.ApplicationUsers.ToList(),
+                Products = productList.ToList()
+            };
+
+            return View(appointmentDetailsViewModel);
         }
     }
 }
