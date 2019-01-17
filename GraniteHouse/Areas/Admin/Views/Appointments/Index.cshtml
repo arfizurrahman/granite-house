@@ -91,21 +91,14 @@
             }
         </table>
     </div>
+    
+    <div page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true" page-class="btn border" 
+         page-class-normal="btn btn-default active" page-class-selected="btn btn-primary active" class="btn-group m-1"></div>
 </form>
 
 @section Scripts{
     <script>
-        $('.timepicker').timepicker({
-            timeFormat: 'h:mm p',
-            interval: 30,
-            minTime: '10',
-            maxTime: '3:00pm',
-            defaultTime: '11',
-            startTime: '10:00',
-            dynamic: true,
-            dropdown: true,
-            scrollbar: true
-        });
+       
         $(function() {
             $("#datepicker").datepicker({
                 minDate: +1,
