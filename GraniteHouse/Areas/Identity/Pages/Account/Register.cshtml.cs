@@ -85,16 +85,6 @@ namespace GraniteHouse.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    if (!await _roleManager.RoleExistsAsync(StaticDetails.AdminEndUser) )
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(StaticDetails.AdminEndUser));
-                    }
-
-                    if (!await _roleManager.RoleExistsAsync(StaticDetails.SuperAdminEndUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(StaticDetails.SuperAdminEndUser));
-                    }
-
                     if (Input.IsSuperAdmin)
                     {
                         await _userManager.AddToRoleAsync(user, StaticDetails.SuperAdminEndUser);
