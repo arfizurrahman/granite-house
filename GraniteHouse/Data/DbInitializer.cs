@@ -23,24 +23,29 @@ namespace GraniteHouse.Data
         }
         public async void Initialize()
         {
-            _db.Database.Migrate(); 
+            if (_db.Database.GetPendingMigrations().Count() > 0)
+            {
+                _db.Database.Migrate();
+            }
 
             if (_db.Roles.Any(r=>r.Name == StaticDetails.SuperAdminEndUser)) return;
 
             _roleManager.CreateAsync(new IdentityRole(StaticDetails.AdminEndUser)).GetAwaiter().GetResult();
             _roleManager.CreateAsync(new IdentityRole(StaticDetails.SuperAdminEndUser)).GetAwaiter().GetResult();
 
-            var user = new ApplicationUser()
+            
+
+            _userManager.CreateAsync(new ApplicationUser()
             {
                 UserName = "admin@gmail.com",
                 Name = "Arfizur Rahman",
                 Email = "admin@gmail.com",
                 PhoneNumber = "4545454545",
                 EmailConfirmed = true
-            };
+            }, "Admin123*").GetAwaiter().GetResult();
 
-            _userManager.CreateAsync(user, "Admin123*").GetAwaiter().GetResult();
-            await _userManager.AddToRoleAsync(await _userManager.FindByEmailAsync("admin@gmail.com"), StaticDetails.SuperAdminEndUser);
+            IdentityUser user = await _db.Users.Where(e => e.Email == "admin@gmail.com").FirstOrDefaultAsync();
+            await _userManager.AddToRoleAsync(user, StaticDetails.SuperAdminEndUser);
 
 
             //var userAdmin = new ApplicationUser
